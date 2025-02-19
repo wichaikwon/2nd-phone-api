@@ -32,8 +32,7 @@ func SetupRouter() *gin.Engine {
 		AllowCredentials: true,
 	}))
 
-	// เพิ่ม authMiddleware สำหรับการตรวจสอบ token ก่อนใช้งาน routes ที่ต้องการ
-	r.Use(authMiddleware)
+	// r.Use(authMiddleware)
 
 	// กำหนด routes สำหรับ Brands
 	brandRoutes := r.Group("/brands")
