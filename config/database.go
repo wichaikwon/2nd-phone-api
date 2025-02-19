@@ -5,7 +5,6 @@ import (
 	"log"
 	"os"
 
-	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 
@@ -15,19 +14,13 @@ import (
 var DB *gorm.DB
 
 func ConnectDB() {
-	// Loading environment variables for local development (optional)
-	err := godotenv.Load()
-	if err != nil {
-		log.Println("⚠️ Warning: No .env file found")
-	}
-
-	// Check if DATABASE_URL is set (Railway environment variable)
+	// ดึงค่าจาก DATABASE_URL ที่ Railway ตั้งให้
 	databaseURL := os.Getenv("DATABASE_URL")
 	if databaseURL == "" {
 		log.Fatal("❌ DATABASE_URL is not set")
 	}
 
-	// Open the database connection using the full DATABASE_URL
+	// เชื่อมต่อกับฐานข้อมูล PostgreSQL บน Railway
 	db, err := gorm.Open(postgres.Open(databaseURL), &gorm.Config{})
 	if err != nil {
 		log.Fatal("❌ Failed to connect to database:", err)
@@ -48,7 +41,6 @@ func ConnectDB() {
 	} else {
 		fmt.Println("✅ AutoMigrate completed!")
 	}
-	fmt.Println("✅ Database Migrated Successfully!")
 
 	DB = db
 }
