@@ -15,26 +15,27 @@ import (
 var DB *gorm.DB
 
 func ConnectDB() {
+	// Loading environment variables for local development (optional)
 	err := godotenv.Load()
 	if err != nil {
 		log.Println("⚠️ Warning: No .env file found")
 	}
-	dsn := fmt.Sprintf(
-		"host=%s user=%s password=%s dbname=%s port=%s sslmode=disable",
-		os.Getenv("DB_HOST"),
-		os.Getenv("DB_USER"),
-		os.Getenv("DB_PASSWORD"),
-		os.Getenv("DB_NAME"),
-		os.Getenv("DB_PORT"),
-	)
 
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	// Check if DATABASE_URL is set (Railway environment variable)
+	databaseURL := os.Getenv("DATABASE_URL")
+	if databaseURL == "" {
+		log.Fatal("❌ DATABASE_URL is not set")
+	}
+
+	// Open the database connection using the full DATABASE_URL
+	db, err := gorm.Open(postgres.Open(databaseURL), &gorm.Config{})
 	if err != nil {
 		log.Fatal("❌ Failed to connect to database:", err)
 	}
 
 	fmt.Println("✅ Database Connected Successfully!")
 
+	// Perform AutoMigrate for your models
 	err = db.AutoMigrate(
 		&models.Brand{},
 		&models.Model{},
