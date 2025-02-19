@@ -25,7 +25,7 @@ func SetupRouter() *gin.Engine {
 
 	// ตั้งค่า CORS ให้รองรับโดเมนที่ต้องการ
 	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{},
+		AllowOrigins:     []string{"*"},
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
 		ExposeHeaders:    []string{"Content-Length"},
